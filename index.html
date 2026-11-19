@@ -171,35 +171,44 @@ h1 {
   padding: 5px 8px;
   letter-spacing: 0.01em;
   overflow-wrap: anywhere;
+  transition: opacity .2s;
 }
 .hint { margin: 2px 0 0; font-size: .85rem; color: var(--muted); }
 
-/* زر تبديل الصف الأول والثاني (غير مفعل حالياً) */
+/* زر تبديل الصف الأول والثاني (مفعل) */
 .grade-switch {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
   background: var(--bg);
-  border: 1px solid var(--line);
+  border: 1.5px solid var(--line);
   border-radius: 10px;
   padding: 4px;
-  opacity: 0.65;
 }
 .grade-btn {
   font: inherit;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 600;
   padding: 7px 10px;
   border-radius: 7px;
   border: 1px solid transparent;
   background: transparent;
   color: var(--muted);
-  cursor: not-allowed;
+  cursor: pointer;
+  transition: background-color .2s, color .2s, border-color .2s;
+}
+.grade-btn:hover:not(.active) {
+  color: var(--ink);
 }
 .grade-btn.active {
-  background: var(--surface);
-  color: var(--ink);
-  border-color: var(--line);
+  background: var(--btn);
+  color: var(--on-btn);
+  border-color: var(--btn);
+  font-weight: 700;
+}
+.grade-btn:focus-visible {
+  outline: 2px solid var(--btn);
+  outline-offset: 2px;
 }
 
 .field {
@@ -319,13 +328,13 @@ h1 {
     <div class="inner">
       <div class="head">
         <h1>اكواد منصه QUREO لطلاب مدرسه الثانويه المشتركة</h1>
-        <p class="sub-en" dir="ltr">{《&lt;ICT &amp; Programming &amp; Financial Literacy&lt;\&gt;》}</p>
+        <p id="subEn" class="sub-en" dir="ltr">{《&lt;ICT &amp; Programming&lt;\&gt;》}</p>
         <p class="hint">اكتب اسمك</p>
       </div>
 
-      <div class="grade-switch" role="group" aria-label="اختيار الصف الدراسي (غير مفعل حالياً)" aria-disabled="true">
-        <button type="button" class="grade-btn active" disabled>الصف الأول</button>
-        <button type="button" class="grade-btn" disabled>الصف الثاني</button>
+      <div id="gradeSwitch" class="grade-switch" role="group" aria-label="اختيار الصف الدراسي">
+        <button type="button" class="grade-btn active" data-grade="1" aria-pressed="true">الصف الأول</button>
+        <button type="button" class="grade-btn" data-grade="2" aria-pressed="false">الصف الثاني</button>
       </div>
 
       <input id="q" class="field" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="اسمك" aria-label="اكتب اسمك">
@@ -366,6 +375,37 @@ h1 {
 
   var USERS = _decodeData(window._0x9f2a);
   try { delete window._0x9f2a; } catch (e) { window._0x9f2a = null; }
+
+  /* ---------- إدارة التبديل بين الصف الأول والثاني ---------- */
+  var SUBTITLES = {
+    "1": "{《<ICT & Programming<\\>》}",
+    "2": "{《<ICT & Programming & Financial Literacy<\\>》}"
+  };
+  var currentGrade = "1";
+
+  function setGrade(grade) {
+    currentGrade = grade;
+    $("subEn").textContent = SUBTITLES[grade] || SUBTITLES["1"];
+
+    var buttons = $("gradeSwitch").querySelectorAll(".grade-btn");
+    Array.prototype.forEach.call(buttons, function (btn) {
+      var isSelected = btn.getAttribute("data-grade") === grade;
+      btn.classList.toggle("active", isSelected);
+      btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+    });
+
+    /* إعادة تشغيل البحث عند تغيير الصف (جاهز للربط بملفات الصفوف لاحقاً) */
+    search();
+  }
+
+  $("gradeSwitch").addEventListener("click", function (e) {
+    var btn = e.target.closest(".grade-btn");
+    if (!btn) return;
+    var grade = btn.getAttribute("data-grade");
+    if (grade && grade !== currentGrade) {
+      setGrade(grade);
+    }
+  });
 
   /* ---------- الوضع الليلي والنهاري ---------- */
   var ICON_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
