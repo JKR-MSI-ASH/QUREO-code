@@ -277,9 +277,11 @@ h1 {
   </section>
 </div>
 
-<script src="المصدر للاكواد.js"></script>
-
 <script>
+  document.write('<script src="' + encodeURI('المصدر للاكواد.js') + '?v=' + Date.now() + '"><\/script>');
+</script>
+
+  <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var root = document.documentElement;
