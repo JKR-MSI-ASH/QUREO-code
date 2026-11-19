@@ -15,6 +15,7 @@ img { max-width: 100%; }
   --bg: #C9C4AD;
   --surface: #D6D1BB;
   --card: rgba(214, 209, 187, 0.97);
+  --card-hero: rgba(214, 209, 187, 0.45);
   --card-res: rgba(214, 209, 187, 0.82);
   --bg-op: 0.24;
   --ink: #17294A;
@@ -55,6 +56,7 @@ img { max-width: 100%; }
     --bg: #0E1730;
     --surface: #16213F;
     --card: rgba(22, 33, 63, 0.96);
+    --card-hero: rgba(22, 33, 63, 0.42);
     --card-res: rgba(22, 33, 63, 0.78);
     --bg-op: 0.42;
     --ink: #E6ECFA;
@@ -79,6 +81,7 @@ img { max-width: 100%; }
   --bg: #0E1730;
   --surface: #16213F;
   --card: rgba(22, 33, 63, 0.96);
+  --card-hero: rgba(22, 33, 63, 0.42);
   --card-res: rgba(22, 33, 63, 0.78);
   --bg-op: 0.42;
   --ink: #E6ECFA;
@@ -131,6 +134,11 @@ body {
   border-radius: 14px;
   overflow: hidden;
 }
+.card-hero {
+  background: var(--card-hero);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
 .card-results { background: var(--card-res); padding: 16px 18px 20px; }
 .hero { display: block; width: 100%; height: auto; max-height: 130px; direction: ltr; }
 .hero .hex { fill: var(--hex); }
@@ -139,7 +147,7 @@ body {
 .hero .node { fill: var(--surface); stroke: var(--sky); stroke-width: 2.5; }
 .hero .chip-t { font-family: var(--font-mono); font-weight: 700; font-size: 16px; }
 
-.inner { padding: 6px 18px 18px; display: flex; flex-direction: column; gap: 12px; }
+.inner { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 12px; }
 .head { display: flex; flex-direction: column; gap: 4px; }
 h1 {
   margin: 0;
@@ -236,7 +244,8 @@ h1 {
     <button id="themeBtn" class="icon-btn" type="button" aria-label="تبديل الوضع الليلي والنهاري"></button>
   </div>
 
-  <main class="card card-top">
+  <!-- المربع العلوي: الرسمة فقط بشفافية أكبر لإظهار الخلفية -->
+  <section class="card card-hero" aria-hidden="true">
     <svg class="hero" viewBox="0 0 420 170" aria-hidden="true" focusable="false">
       <polygon class="hex" points="210,8 277,46 277,124 210,162 143,124 143,46"/>
       <text class="glyph" x="210" y="99" text-anchor="middle">&lt;/&gt;</text>
@@ -260,7 +269,10 @@ h1 {
       <rect x="64" y="138" width="22" height="9" rx="1" fill="var(--amber)" opacity=".6"/>
       <rect x="378" y="108" width="12" height="26" fill="var(--sky)"/>
     </svg>
+  </section>
 
+  <!-- المربع السفلي: يبدأ من عنوان أكواد الطلاب وحقل البحث -->
+  <main class="card card-top">
     <div class="inner">
       <div class="head">
         <h1>أكواد الطلاب</h1>
@@ -281,7 +293,7 @@ h1 {
   document.write('<script src="' + encodeURI('المصدر للاكواد.js') + '?v=' + Date.now() + '"><\/script>');
 </script>
 
-  <script>
+<script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var root = document.documentElement;
@@ -465,7 +477,7 @@ h1 {
     if (!n) {
       setStatus("", "");
     } else if (USERS.length === 0) {
-      setStatus("تأكد من وجود ملف students.js في نفس المجلد", "warn");
+      setStatus("تأكد من وجود ملف المصدر للاكواد.js في نفس المجلد", "warn");
     } else {
       list = USERS.filter(function (u) { return norm(u.name) === n; });
       if (list.length !== 1 && n.length >= 2) {
