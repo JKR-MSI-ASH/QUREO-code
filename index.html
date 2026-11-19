@@ -463,7 +463,7 @@ h1 {
     if (!n) {
       setStatus("", "");
     } else if (USERS.length === 0) {
-      setStatus("تعذر تحميل ملف البيانات", "warn");
+      setStatus("تأكد من وجود ملف students.js في نفس المجلد", "warn");
     } else {
       list = USERS.filter(function (u) { return norm(u.name) === n; });
       if (list.length !== 1 && n.length >= 2) {
