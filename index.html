@@ -9,13 +9,13 @@ html, body { margin: 0; }
 img { max-width: 100%; }
 [hidden] { display: none !important; }
 </style>
-<title>أكواد الطلاب</title>
+<title>أكواد منصة QUREO</title>
 <style>
 :root {
   --bg: #C9C4AD;
   --surface: #D6D1BB;
   --card: rgba(214, 209, 187, 0.97);
-  --card-hero: rgba(214, 209, 187, 0.45);
+  --card-hero: rgba(214, 209, 187, 0.18);
   --card-res: rgba(214, 209, 187, 0.82);
   --bg-op: 0.24;
   --ink: #17294A;
@@ -56,7 +56,7 @@ img { max-width: 100%; }
     --bg: #0E1730;
     --surface: #16213F;
     --card: rgba(22, 33, 63, 0.96);
-    --card-hero: rgba(22, 33, 63, 0.42);
+    --card-hero: rgba(22, 33, 63, 0.15);
     --card-res: rgba(22, 33, 63, 0.78);
     --bg-op: 0.42;
     --ink: #E6ECFA;
@@ -81,7 +81,7 @@ img { max-width: 100%; }
   --bg: #0E1730;
   --surface: #16213F;
   --card: rgba(22, 33, 63, 0.96);
-  --card-hero: rgba(22, 33, 63, 0.42);
+  --card-hero: rgba(22, 33, 63, 0.15);
   --card-res: rgba(22, 33, 63, 0.78);
   --bg-op: 0.42;
   --ink: #E6ECFA;
@@ -136,8 +136,8 @@ body {
 }
 .card-hero {
   background: var(--card-hero);
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 .card-results { background: var(--card-res); padding: 16px 18px 20px; }
 .hero { display: block; width: 100%; height: auto; max-height: 130px; direction: ltr; }
@@ -148,16 +148,59 @@ body {
 .hero .chip-t { font-family: var(--font-mono); font-weight: 700; font-size: 16px; }
 
 .inner { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 12px; }
-.head { display: flex; flex-direction: column; gap: 4px; }
+.head { display: flex; flex-direction: column; gap: 6px; }
 h1 {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.6rem, 7vw, 2.1rem);
-  line-height: 1.25;
+  font-weight: 700;
+  font-size: clamp(1.22rem, 5vw, 1.45rem);
+  line-height: 1.45;
   text-wrap: balance;
 }
-.hint { margin: 0; font-size: .85rem; color: var(--muted); }
+.sub-en {
+  margin: 0;
+  direction: ltr;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--btn);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 5px 8px;
+  letter-spacing: 0.01em;
+  overflow-wrap: anywhere;
+}
+.hint { margin: 2px 0 0; font-size: .85rem; color: var(--muted); }
+
+/* زر تبديل الصف الأول والثاني (غير مفعل حالياً) */
+.grade-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 4px;
+  opacity: 0.65;
+}
+.grade-btn {
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 7px 10px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  cursor: not-allowed;
+}
+.grade-btn.active {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line);
+}
 
 .field {
   width: 100%;
@@ -244,7 +287,7 @@ h1 {
     <button id="themeBtn" class="icon-btn" type="button" aria-label="تبديل الوضع الليلي والنهاري"></button>
   </div>
 
-  <!-- المربع العلوي: الرسمة فقط بشفافية أكبر لإظهار الخلفية -->
+  <!-- المربع العلوي: الرسمة بشفافية عالية لإظهار خلفية الأرقام بوضوح -->
   <section class="card card-hero" aria-hidden="true">
     <svg class="hero" viewBox="0 0 420 170" aria-hidden="true" focusable="false">
       <polygon class="hex" points="210,8 277,46 277,124 210,162 143,124 143,46"/>
@@ -271,12 +314,18 @@ h1 {
     </svg>
   </section>
 
-  <!-- المربع السفلي: يبدأ من عنوان أكواد الطلاب وحقل البحث -->
+  <!-- المربع السفلي: العنوان + الجزء الإنجليزي + زر تبديل الصف + البحث -->
   <main class="card card-top">
     <div class="inner">
       <div class="head">
-        <h1>أكواد الطلاب</h1>
+        <h1>اكواد منصه QUREO لطلاب مدرسه الثانويه المشتركة</h1>
+        <p class="sub-en" dir="ltr">{《&lt;ICT &amp; Programming &amp; Financial Literacy&lt;\&gt;》}</p>
         <p class="hint">اكتب اسمك</p>
+      </div>
+
+      <div class="grade-switch" role="group" aria-label="اختيار الصف الدراسي (غير مفعل حالياً)" aria-disabled="true">
+        <button type="button" class="grade-btn active" disabled>الصف الأول</button>
+        <button type="button" class="grade-btn" disabled>الصف الثاني</button>
       </div>
 
       <input id="q" class="field" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="اسمك" aria-label="اكتب اسمك">
