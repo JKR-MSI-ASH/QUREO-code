@@ -277,7 +277,6 @@ h1 {
   </section>
 </div>
 
-<!-- تحميل ملف البيانات المنفصل -->
 <script src="students.js"></script>
 
 <script>
@@ -285,8 +284,8 @@ h1 {
   var $ = function (id) { return document.getElementById(id); };
   var root = document.documentElement;
 
-  /* ---------- طبقة فك التمويه المعزولة (Data Layer) ---------- */
-  var _K = "Korio@2026#Sec";
+  /* ---------- طبقة فك التمويه المعزولة ---------- */
+  var _K = "Qureo@2026#Sec";
   function _decodeData(blob) {
     if (!blob) return [];
     try {
@@ -302,7 +301,6 @@ h1 {
     }
   }
 
-  /* تخزين البيانات داخل نطاق مغلق وحذف المتغير العام فوراً */
   var USERS = _decodeData(window._0x9f2a);
   try { delete window._0x9f2a; } catch (e) { window._0x9f2a = null; }
 
@@ -322,7 +320,7 @@ h1 {
     $("themeBtn").setAttribute("aria-label", dark ? "الوضع الليلي شغال، اضغط للنهاري" : "الوضع النهاري شغال، اضغط لليلي");
   }
   try {
-    var saved = localStorage.getItem("korio-theme");
+    var saved = localStorage.getItem("qureo-theme");
     if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
   } catch (e) {}
   paintIcon();
@@ -330,7 +328,7 @@ h1 {
   $("themeBtn").addEventListener("click", function () {
     var next = effective() === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
-    try { localStorage.setItem("korio-theme", next); } catch (e) {}
+    try { localStorage.setItem("qureo-theme", next); } catch (e) {}
     paintIcon();
   });
 
