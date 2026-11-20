@@ -248,16 +248,15 @@ h1 {
   }
 }
 
-/* الإيستر إيج الثاني (الطبقة الداخلية السرية): عنوان التطوير + التبديل في الأماكن والألوان */
-.nested-easter {
+/* عنوان التطوير في الإيستر إيج الأول: التبديل في الأماكن والألوان */
+.dv-card {
   border-radius: 10px;
-  padding: 12px 14px;
-  background: rgba(11, 26, 48, 0.92);
-  border: 1.5px dashed #5CC3F0;
+  padding: 11px 13px;
+  background: rgba(11, 26, 48, 0.88);
+  border: 1px solid var(--line);
   display: flex;
   flex-direction: column;
   gap: 8px;
-  animation: pop .3s ease-out;
 }
 .dv-head {
   display: flex;
@@ -293,15 +292,24 @@ h1 {
 .dv-c1 { color: #5CC3F0; background: rgba(92, 195, 240, 0.13); }
 .dv-c2 { color: #29FF7A; background: rgba(41, 255, 122, 0.13); }
 
-.dv-credits {
+/* الإيستر إيج الثاني (الطبقة الداخلية السرية): العبارة الكاملة */
+.nested-easter {
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: rgba(11, 26, 48, 0.92);
+  border: 1.5px dashed #5CC3F0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: pop .3s ease-out;
+}
+.nested-txt {
   margin: 0;
   font-family: var(--font-display);
   font-size: 0.94rem;
   font-weight: 700;
   line-height: 1.55;
   color: var(--ink);
-  border-top: 1px dashed var(--line);
-  padding-top: 8px;
 }
 
 .easter-btn {
@@ -488,13 +496,17 @@ h1 {
           <button id="schoolBtn" type="button" class="easter-btn easter-btn-school" disabled>بوابة المدرسة</button>
         </div>
 
-        <!-- الإيستر إيج الثاني (الطبقة الداخلية السرية): عنوان التطوير + التبديل في الأماكن والألوان -->
-        <div id="nestedEasterBox" class="nested-easter" hidden>
+        <!-- عنوان التطوير في الإيستر إيج الأول: التبديل في الأماكن والألوان بدون العبارة -->
+        <div class="dv-card">
           <div class="dv-head">
             <h2 id="dvTitle" class="dv-title">Dv تطوير</h2>
           </div>
           <div id="dvChips" class="dv-list"></div>
-          <p id="dvCredits" class="dv-credits">تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &amp;{Messi⁷⁰} &amp; {ashref aldoksy¹⁰}</p>
+        </div>
+
+        <!-- الإيستر إيج الثاني (الطبقة الداخلية السرية) -->
+        <div id="nestedEasterBox" class="nested-easter" hidden>
+          <p id="nestedEasterText" class="nested-txt">تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &amp;{Messi⁷⁰} &amp; {ashref aldoksy¹⁰}</p>
         </div>
       </div>
 
@@ -566,11 +578,11 @@ h1 {
     academyBtnText: primarySource.academyBtnText || "دخول الأكاديمية",
     schoolText: primarySource.schoolText || "من مدرسه البصيليه الثانويه المشتركة",
     schoolBtnText: primarySource.schoolBtnText || "بوابة المدرسة",
-    dvLabel: secondarySource.dvLabel || "Dv تطوير",
-    devs: Array.isArray(secondarySource.devs) && secondarySource.devs.length
-      ? secondarySource.devs.slice()
+    dvLabel: primarySource.dvLabel || "Dv تطوير",
+    devs: Array.isArray(primarySource.devs) && primarySource.devs.length
+      ? primarySource.devs.slice()
       : ["JOKER", "Messi⁷", "AShraf"],
-    creditsText: secondarySource.creditsText || secondarySource.nestedText || "تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &{Messi⁷⁰} & {ashref aldoksy¹⁰}",
+    nestedText: secondarySource.nestedText || "تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &{Messi⁷⁰} & {ashref aldoksy¹⁰}",
     extraInfo: null
   };
 
@@ -629,7 +641,7 @@ h1 {
     $("schoolTitle").textContent = currentMeta.schoolText || DEFAULT_EASTER_META.schoolText;
     $("schoolBtn").textContent = currentMeta.schoolBtnText || DEFAULT_EASTER_META.schoolBtnText;
     $("dvTitle").textContent = currentMeta.dvLabel || DEFAULT_EASTER_META.dvLabel;
-    $("dvCredits").textContent = currentMeta.creditsText || DEFAULT_EASTER_META.creditsText;
+    $("nestedEasterText").textContent = currentMeta.nestedText || DEFAULT_EASTER_META.nestedText;
     $("academyBtn").disabled = true;
     $("schoolBtn").disabled = true;
     renderDvRotation();
