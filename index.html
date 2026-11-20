@@ -248,15 +248,16 @@ h1 {
   }
 }
 
-/* عنوان التطوير مع التبديل في الأماكن والألوان */
-.dv-card {
+/* الإيستر إيج الثاني (الطبقة الداخلية عند حرف J): عنوان التطوير + التبديل في الأماكن والألوان */
+.nested-easter {
   border-radius: 10px;
-  padding: 11px 13px;
-  background: rgba(11, 26, 48, 0.88);
-  border: 1px solid var(--line);
+  padding: 12px 14px;
+  background: rgba(11, 26, 48, 0.92);
+  border: 1.5px dashed #5CC3F0;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  animation: pop .3s ease-out;
 }
 .dv-head {
   display: flex;
@@ -267,7 +268,7 @@ h1 {
 .dv-title {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.86rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: #5CC3F0;
 }
@@ -295,37 +296,12 @@ h1 {
 .dv-credits {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 0.92rem;
+  font-size: 0.94rem;
   font-weight: 700;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--ink);
   border-top: 1px dashed var(--line);
   padding-top: 8px;
-}
-
-/* الطبقة السرية الداخلية (تُفتح بالضغط على حرف J داخل وضع الـ Easter Egg) */
-.nested-easter {
-  border-radius: 10px;
-  padding: 12px 14px;
-  background: rgba(11, 26, 48, 0.9);
-  border: 1.5px dashed #5CC3F0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  animation: pop .3s ease-out;
-}
-.nested-tag {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #5CC3F0;
-}
-.nested-txt {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--ink);
 }
 
 .easter-btn {
@@ -500,7 +476,7 @@ h1 {
         <button type="button" class="grade-btn active" data-grade="2" aria-pressed="true">الصف الثاني</button>
       </div>
 
-      <!-- واجهة الـ Easter Egg الخاصة بالأكاديمية (تظهر فقط في الوضع السري) -->
+      <!-- واجهة الـ Easter Egg الأول (تظهر فقط في الوضع السري) -->
       <div id="easterPanel" class="easter-panel" hidden>
         <div class="easter-box easter-rgb">
           <p id="academyTitle" class="easter-txt">طلاب اكادمية المبرمج الصغير</p>
@@ -512,19 +488,13 @@ h1 {
           <button id="schoolBtn" type="button" class="easter-btn easter-btn-school" disabled>بوابة المدرسة</button>
         </div>
 
-        <!-- عنوان التطوير مع التبديل في الأماكن والألوان ونص التطوير الكامل -->
-        <div class="dv-card">
+        <!-- الإيستر إيج الثاني (الطبقة الداخلية عند حرف J): عنوان التطوير + التبديل في الأماكن والألوان -->
+        <div id="nestedEasterBox" class="nested-easter" hidden>
           <div class="dv-head">
             <h2 id="dvTitle" class="dv-title">Dv تطوير</h2>
           </div>
           <div id="dvChips" class="dv-list"></div>
           <p id="dvCredits" class="dv-credits">تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &amp;{Messi⁷⁰} &amp; {ashref aldoksy¹⁰}</p>
-        </div>
-
-        <!-- إيستر إيج فرعي داخل الإيستر إيج الأساسي (يُفتح بالضغط على حرف J) -->
-        <div id="nestedEasterBox" class="nested-easter" hidden>
-          <span class="nested-tag">[J]</span>
-          <p id="nestedEasterText" class="nested-txt">تم تفعيل الطبقة السرية الداخلية (J)</p>
         </div>
       </div>
 
@@ -596,12 +566,11 @@ h1 {
     academyBtnText: primarySource.academyBtnText || "دخول الأكاديمية",
     schoolText: primarySource.schoolText || "من مدرسه البصيليه الثانويه المشتركة",
     schoolBtnText: primarySource.schoolBtnText || "بوابة المدرسة",
-    dvLabel: primarySource.dvLabel || "Dv تطوير",
-    devs: Array.isArray(primarySource.devs) && primarySource.devs.length
-      ? primarySource.devs.slice()
+    dvLabel: secondarySource.dvLabel || "Dv تطوير",
+    devs: Array.isArray(secondarySource.devs) && secondarySource.devs.length
+      ? secondarySource.devs.slice()
       : ["JOKER", "Messi⁷", "AShraf"],
-    creditsText: primarySource.creditsText || "تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &{Messi⁷⁰} & {ashref aldoksy¹⁰}",
-    nestedText: secondarySource.nestedText || "تم تفعيل الطبقة السرية الداخلية (J)",
+    creditsText: secondarySource.creditsText || secondarySource.nestedText || "تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &{Messi⁷⁰} & {ashref aldoksy¹⁰}",
     extraInfo: null
   };
 
@@ -661,7 +630,6 @@ h1 {
     $("schoolBtn").textContent = currentMeta.schoolBtnText || DEFAULT_EASTER_META.schoolBtnText;
     $("dvTitle").textContent = currentMeta.dvLabel || DEFAULT_EASTER_META.dvLabel;
     $("dvCredits").textContent = currentMeta.creditsText || DEFAULT_EASTER_META.creditsText;
-    $("nestedEasterText").textContent = currentMeta.nestedText || DEFAULT_EASTER_META.nestedText;
     $("academyBtn").disabled = true;
     $("schoolBtn").disabled = true;
     renderDvRotation();
@@ -1092,4 +1060,4 @@ h1 {
 })();
 </script>
 </body>
-</html>
+                                                                         </html>
