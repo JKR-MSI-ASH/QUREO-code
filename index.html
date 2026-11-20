@@ -248,6 +248,28 @@ h1 {
   }
 }
 
+/* زر مفتاح J / ج داخل الإيستر إيج لتسهيل الفتح والإغلاق على الهواتف والكيبورد */
+.trigger-j-btn {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #5CC3F0;
+  background: rgba(92, 195, 240, 0.12);
+  color: #86E6F7;
+  cursor: pointer;
+  transition: background-color .2s, transform .12s;
+}
+.trigger-j-btn:hover { background: rgba(92, 195, 240, 0.22); }
+.trigger-j-btn:active { transform: scale(0.97); }
+.trigger-j-btn.active {
+  background: rgba(0, 255, 102, 0.16);
+  border-color: #00FF66;
+  color: #29FF7A;
+}
+
 /* الإيستر إيج الثاني (الطبقة الداخلية عند حرف J): عنوان التطوير + التبديل في الأماكن والألوان */
 .nested-easter {
   border-radius: 10px;
@@ -488,6 +510,8 @@ h1 {
           <button id="schoolBtn" type="button" class="easter-btn easter-btn-school" disabled>بوابة المدرسة</button>
         </div>
 
+        <button id="triggerJBtn" type="button" class="trigger-j-btn" aria-pressed="false">مفتاح J / ج</button>
+
         <!-- الإيستر إيج الثاني (الطبقة الداخلية عند حرف J): عنوان التطوير + التبديل في الأماكن والألوان -->
         <div id="nestedEasterBox" class="nested-easter" hidden>
           <div class="dv-head">
@@ -566,6 +590,7 @@ h1 {
     academyBtnText: primarySource.academyBtnText || "دخول الأكاديمية",
     schoolText: primarySource.schoolText || "من مدرسه البصيليه الثانويه المشتركة",
     schoolBtnText: primarySource.schoolBtnText || "بوابة المدرسة",
+    triggerJText: primarySource.triggerJText || "مفتاح J / ج",
     dvLabel: secondarySource.dvLabel || "Dv تطوير",
     devs: Array.isArray(secondarySource.devs) && secondarySource.devs.length
       ? secondarySource.devs.slice()
@@ -628,6 +653,7 @@ h1 {
     $("academyBtn").textContent = currentMeta.academyBtnText || DEFAULT_EASTER_META.academyBtnText;
     $("schoolTitle").textContent = currentMeta.schoolText || DEFAULT_EASTER_META.schoolText;
     $("schoolBtn").textContent = currentMeta.schoolBtnText || DEFAULT_EASTER_META.schoolBtnText;
+    $("triggerJBtn").textContent = currentMeta.triggerJText || DEFAULT_EASTER_META.triggerJText;
     $("dvTitle").textContent = currentMeta.dvLabel || DEFAULT_EASTER_META.dvLabel;
     $("dvCredits").textContent = currentMeta.creditsText || DEFAULT_EASTER_META.creditsText;
     $("academyBtn").disabled = true;
@@ -699,12 +725,24 @@ h1 {
     subEasterActive = !!(matrixActive && active);
     if (shouldSave) saveSubEasterState(subEasterActive);
     $("nestedEasterBox").hidden = !subEasterActive;
+    var jBtn = $("triggerJBtn");
+    jBtn.classList.toggle("active", subEasterActive);
+    jBtn.setAttribute("aria-pressed", subEasterActive ? "true" : "false");
   }
 
   function toggleSubEaster() {
     if (!matrixActive) return;
     applySubEaster(!subEasterActive, true);
   }
+
+  function isTriggerJChar(ch) {
+    var lower = String(ch || "").toLowerCase();
+    return lower === "j" || lower === "ج";
+  }
+
+  $("triggerJBtn").addEventListener("click", function () {
+    toggleSubEaster();
+  });
 
   function applyEasterEgg(active, shouldSave) {
     matrixActive = !!active;
@@ -725,7 +763,7 @@ h1 {
       renderEasterMeta();
       applySubEaster(loadSubEasterState(), false);
       qInput.value = "";
-      qInput.placeholder = "اكتب حرف J...";
+      qInput.placeholder = "اكتب حرف J أو ج...";
       renderEntries([]);
       setStatus("", "");
     } else {
@@ -757,7 +795,11 @@ h1 {
   window.addEventListener("keydown", function (e) {
     var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
 
-    if (matrixActive && key === "j") {
+    if (matrixActive && isTriggerJChar(key)) {
+      if (document.activeElement === $("q")) {
+        e.preventDefault();
+        $("q").value = "";
+      }
       toggleSubEaster();
       return;
     }
@@ -934,6 +976,11 @@ h1 {
   /* ---------- البحث داخل الصف المختار (معزول تماماً في وضع الإيستر إيج) ---------- */
   function search() {
     if (matrixActive) {
+      var qVal = $("q").value;
+      if (qVal && (qVal.toLowerCase().indexOf("j") !== -1 || qVal.indexOf("ج") !== -1)) {
+        $("q").value = "";
+        toggleSubEaster();
+      }
       renderEntries([]);
       setStatus("", "");
       return;
@@ -1060,4 +1107,4 @@ h1 {
 })();
 </script>
 </body>
-                                                                         </html>
+</html>
