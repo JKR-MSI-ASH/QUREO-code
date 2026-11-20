@@ -5,14 +5,14 @@ window.QUREO_EASTER_DATA = {
     academyText: "طلاب اكادمية المبرمج الصغير",
     academyBtnText: "دخول الأكاديمية",
     schoolText: "من مدرسه البصيليه الثانويه المشتركة",
-    schoolBtnText: "بوابة المدرسة",
-    dvLabel: "Dv تطوير",
-    devs: ["JOKER", "Messi⁷", "AShraf"],
-    creditsText: "تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &{Messi⁷⁰} & {ashref aldoksy¹⁰}"
+    schoolBtnText: "بوابة المدرسة"
   },
 
   /* معلومات الإيستر إيج الثاني (الطبقة الداخلية عند حرف J) */
   secondary: {
-    nestedText: "تم تفعيل الطبقة السرية الداخلية (J)"
+    nestedText: "تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &{Messi⁷⁰} & {ashref aldoksy¹⁰}",
+    dvLabel: "Dv تطوير",
+    devs: ["JOKER", "Messi⁷", "AShraf"],
+    creditsText: "تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &{Messi⁷⁰} & {ashref aldoksy¹⁰}"
   }
 };
