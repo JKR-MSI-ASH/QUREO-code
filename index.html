@@ -248,6 +248,61 @@ h1 {
   }
 }
 
+/* عنوان التطوير مع التبديل في الأماكن والألوان */
+.dv-card {
+  border-radius: 10px;
+  padding: 11px 13px;
+  background: rgba(11, 26, 48, 0.88);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dv-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.dv-title {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #5CC3F0;
+}
+.dv-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  direction: ltr;
+}
+.dv-chip {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  background: rgba(255, 255, 255, 0.04);
+  transition: transform .35s ease, color .35s ease, border-color .35s ease, background-color .35s ease;
+  animation: pop .3s ease-out;
+}
+.dv-c0 { color: #FF5C77; background: rgba(255, 92, 119, 0.13); }
+.dv-c1 { color: #5CC3F0; background: rgba(92, 195, 240, 0.13); }
+.dv-c2 { color: #29FF7A; background: rgba(41, 255, 122, 0.13); }
+
+.dv-credits {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink);
+  border-top: 1px dashed var(--line);
+  padding-top: 8px;
+}
+
 /* الطبقة السرية الداخلية (تُفتح بالضغط على حرف J داخل وضع الـ Easter Egg) */
 .nested-easter {
   border-radius: 10px;
@@ -390,7 +445,7 @@ h1 {
 .pop { animation: pop .35s ease-out; }
 @keyframes pop { from { opacity: .35; transform: translateY(5px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
-  .pop, .easter-rgb, .easter-rgb .easter-txt, .easter-school, .easter-school .easter-txt, .nested-easter { animation: none; }
+  .pop, .easter-rgb, .easter-rgb .easter-txt, .easter-school, .easter-school .easter-txt, .nested-easter, .dv-chip { animation: none; }
   * { transition: none !important; }
 }
 </style>
@@ -457,10 +512,19 @@ h1 {
           <button id="schoolBtn" type="button" class="easter-btn easter-btn-school" disabled>بوابة المدرسة</button>
         </div>
 
+        <!-- عنوان التطوير مع التبديل في الأماكن والألوان ونص التطوير الكامل -->
+        <div class="dv-card">
+          <div class="dv-head">
+            <h2 id="dvTitle" class="dv-title">Dv تطوير</h2>
+          </div>
+          <div id="dvChips" class="dv-list"></div>
+          <p id="dvCredits" class="dv-credits">تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &amp;{Messi⁷⁰} &amp; {ashref aldoksy¹⁰}</p>
+        </div>
+
         <!-- إيستر إيج فرعي داخل الإيستر إيج الأساسي (يُفتح بالضغط على حرف J) -->
         <div id="nestedEasterBox" class="nested-easter" hidden>
           <span class="nested-tag">[J]</span>
-          <p id="nestedEasterText" class="nested-txt">تم تفعيل الطبقة السرية الداخلية</p>
+          <p id="nestedEasterText" class="nested-txt">تم تفعيل الطبقة السرية الداخلية (J)</p>
         </div>
       </div>
 
@@ -474,11 +538,12 @@ h1 {
   </section>
 </div>
 
-<!-- تحميل ملفي الصف الأول والصف الثاني مع كسر الكاش -->
+<!-- تحميل ملفات الصف الأول والثاني + ملف معلومات الإيستر إيج المستقل مع كسر الكاش -->
 <script>
   var _ts = Date.now();
   document.write('<script src="' + encodeURI('المصدر للاكواد - الصف الاول.js') + '?v=' + _ts + '"><\/script>');
   document.write('<script src="' + encodeURI('المصدر للاكواد - الصف الثاني.js') + '?v=' + _ts + '"><\/script>');
+  document.write('<script src="' + encodeURI('easter-data.js') + '?v=' + _ts + '"><\/script>');
 </script>
 
 <script>
@@ -517,28 +582,41 @@ h1 {
     window._0x9f2a_1 = window._0x9f2a_2 = window._0x9f2a = null;
   }
 
-  /* ---------- بنية استقبال معلومات الـ Easter Egg من التخزين (غير تخزين الطلاب) ---------- */
+  /* ---------- بنية استقبال معلومات الإيستر إيج الأول والثاني من الملف الخارجي + التخزين ---------- */
   var EASTER_STATE_KEY = "qureo-easter";
   var EASTER_META_KEY = "qureo-easter-meta";
   var NESTED_J_KEY = "qureo-easter-j";
 
+  var fileSource = window.QUREO_EASTER_DATA || {};
+  var primarySource = fileSource.primary || {};
+  var secondarySource = fileSource.secondary || {};
+
   var DEFAULT_EASTER_META = {
-    academyText: "طلاب اكادمية المبرمج الصغير",
-    academyBtnText: "دخول الأكاديمية",
-    schoolText: "من مدرسه البصيليه الثانويه المشتركة",
-    schoolBtnText: "بوابة المدرسة",
-    nestedText: "تم تفعيل الطبقة السرية الداخلية",
+    academyText: primarySource.academyText || "طلاب اكادمية المبرمج الصغير",
+    academyBtnText: primarySource.academyBtnText || "دخول الأكاديمية",
+    schoolText: primarySource.schoolText || "من مدرسه البصيليه الثانويه المشتركة",
+    schoolBtnText: primarySource.schoolBtnText || "بوابة المدرسة",
+    dvLabel: primarySource.dvLabel || "Dv تطوير",
+    devs: Array.isArray(primarySource.devs) && primarySource.devs.length
+      ? primarySource.devs.slice()
+      : ["JOKER", "Messi⁷", "AShraf"],
+    creditsText: primarySource.creditsText || "تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &{Messi⁷⁰} & {ashref aldoksy¹⁰}",
+    nestedText: secondarySource.nestedText || "تم تفعيل الطبقة السرية الداخلية (J)",
     extraInfo: null
   };
 
   function readEasterMeta() {
     try {
       var raw = localStorage.getItem(EASTER_META_KEY);
-      if (!raw) return Object.assign({}, DEFAULT_EASTER_META);
+      if (!raw) return Object.assign({}, DEFAULT_EASTER_META, { devs: DEFAULT_EASTER_META.devs.slice() });
       var parsed = JSON.parse(raw);
-      return Object.assign({}, DEFAULT_EASTER_META, parsed || {});
+      var merged = Object.assign({}, DEFAULT_EASTER_META, parsed || {});
+      if (!Array.isArray(merged.devs) || !merged.devs.length) {
+        merged.devs = DEFAULT_EASTER_META.devs.slice();
+      }
+      return merged;
     } catch (e) {
-      return Object.assign({}, DEFAULT_EASTER_META);
+      return Object.assign({}, DEFAULT_EASTER_META, { devs: DEFAULT_EASTER_META.devs.slice() });
     }
   }
 
@@ -553,15 +631,40 @@ h1 {
     }
   }
 
+  var currentMeta = readEasterMeta();
+  var dvTick = 0;
+
+  function renderDvRotation() {
+    var container = $("dvChips");
+    if (!container) return;
+    var devs = currentMeta.devs && currentMeta.devs.length ? currentMeta.devs : DEFAULT_EASTER_META.devs;
+    var len = devs.length;
+    var shift = dvTick % len;
+    var colorClasses = ["dv-c0", "dv-c1", "dv-c2"];
+
+    container.textContent = "";
+    for (var i = 0; i < len; i++) {
+      var devName = devs[(i + shift) % len];
+      var colorClass = colorClasses[(i + dvTick) % colorClasses.length];
+      var chip = document.createElement("span");
+      chip.className = "dv-chip " + colorClass;
+      chip.textContent = devName;
+      container.appendChild(chip);
+    }
+  }
+
   function renderEasterMeta(meta) {
-    var m = meta || readEasterMeta();
-    $("academyTitle").textContent = m.academyText || DEFAULT_EASTER_META.academyText;
-    $("academyBtn").textContent = m.academyBtnText || DEFAULT_EASTER_META.academyBtnText;
-    $("schoolTitle").textContent = m.schoolText || DEFAULT_EASTER_META.schoolText;
-    $("schoolBtn").textContent = m.schoolBtnText || DEFAULT_EASTER_META.schoolBtnText;
-    $("nestedEasterText").textContent = m.nestedText || DEFAULT_EASTER_META.nestedText;
+    currentMeta = meta || readEasterMeta();
+    $("academyTitle").textContent = currentMeta.academyText || DEFAULT_EASTER_META.academyText;
+    $("academyBtn").textContent = currentMeta.academyBtnText || DEFAULT_EASTER_META.academyBtnText;
+    $("schoolTitle").textContent = currentMeta.schoolText || DEFAULT_EASTER_META.schoolText;
+    $("schoolBtn").textContent = currentMeta.schoolBtnText || DEFAULT_EASTER_META.schoolBtnText;
+    $("dvTitle").textContent = currentMeta.dvLabel || DEFAULT_EASTER_META.dvLabel;
+    $("dvCredits").textContent = currentMeta.creditsText || DEFAULT_EASTER_META.creditsText;
+    $("nestedEasterText").textContent = currentMeta.nestedText || DEFAULT_EASTER_META.nestedText;
     $("academyBtn").disabled = true;
     $("schoolBtn").disabled = true;
+    renderDvRotation();
   }
 
   window.QureoEasterStorage = {
@@ -569,11 +672,19 @@ h1 {
     setMeta: writeEasterMeta,
     clearMeta: function () {
       try { localStorage.removeItem(EASTER_META_KEY); } catch (e) {}
-      renderEasterMeta(DEFAULT_EASTER_META);
+      renderEasterMeta(Object.assign({}, DEFAULT_EASTER_META, { devs: DEFAULT_EASTER_META.devs.slice() }));
     }
   };
 
-  renderEasterMeta();
+  renderEasterMeta(currentMeta);
+
+  var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  if (!reduceMotion) {
+    setInterval(function () {
+      dvTick++;
+      renderDvRotation();
+    }, 1800);
+  }
 
   /* ---------- Easter Egg الأساسي + الإيستر إيج الداخلي عند حرف J ---------- */
   var matrixActive = false;
@@ -639,7 +750,6 @@ h1 {
     $("gradeSwitch").hidden = matrixActive;
     $("easterPanel").hidden = !matrixActive;
 
-    /* الحقل مفتوح للكتابة في وضع الإيستر إيج ولكن معزول تماماً عن بيانات الطلاب */
     var qInput = $("q");
     qInput.disabled = false;
 
@@ -679,7 +789,6 @@ h1 {
   window.addEventListener("keydown", function (e) {
     var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
 
-    /* إيستر إيج فرعي عند الضغط على حرف J داخل وضع الإيستر إيج الأساسي فقط */
     if (matrixActive && key === "j") {
       toggleSubEaster();
       return;
