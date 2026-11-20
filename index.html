@@ -332,10 +332,6 @@ h1 {
 .field::placeholder { color: var(--muted); opacity: .8; }
 .field:focus { outline: none; border-color: var(--btn); }
 .field:focus-visible { outline: 2px solid var(--btn); outline-offset: 2px; }
-.field:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
 
 .status { min-height: 2.1rem; margin: 0; display: flex; align-items: center; }
 .status span { font-size: .92rem; padding: 3px 12px; border-radius: 999px; color: var(--ink); }
@@ -643,14 +639,15 @@ h1 {
     $("gradeSwitch").hidden = matrixActive;
     $("easterPanel").hidden = !matrixActive;
 
+    /* الحقل مفتوح للكتابة في وضع الإيستر إيج ولكن معزول تماماً عن بيانات الطلاب */
     var qInput = $("q");
-    qInput.disabled = matrixActive;
+    qInput.disabled = false;
 
     if (matrixActive) {
       renderEasterMeta();
       applySubEaster(loadSubEasterState(), false);
       qInput.value = "";
-      qInput.placeholder = "تم إيقاف البحث في الوضع السري";
+      qInput.placeholder = "اكتب حرف J...";
       renderEntries([]);
       setStatus("", "");
     } else {
@@ -857,9 +854,13 @@ h1 {
     }
   }
 
-  /* ---------- البحث داخل الصف المختار ---------- */
+  /* ---------- البحث داخل الصف المختار (معزول تماماً في وضع الإيستر إيج) ---------- */
   function search() {
-    if (matrixActive) return;
+    if (matrixActive) {
+      renderEntries([]);
+      setStatus("", "");
+      return;
+    }
 
     var n = norm($("q").value);
     var usersList = DATA[currentGrade] || [];
@@ -982,4 +983,4 @@ h1 {
 })();
 </script>
 </body>
-  </html>
+</html>
