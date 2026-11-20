@@ -156,22 +156,59 @@ h1 {
   gap: 8px;
 }
 
-/* بطاقة الأكاديمية: مزيج RGB (أخضر - أحمر - أزرق) */
+/* بطاقة الأكاديمية: ألوان متغيرة باستمرار بين الأحمر والأزرق والأخضر */
 .easter-rgb {
-  background: linear-gradient(135deg, rgba(0, 255, 102, 0.14), rgba(255, 59, 92, 0.14), rgba(58, 174, 230, 0.16));
-  border: 1.5px solid transparent;
-  background-clip: padding-box;
-  box-shadow: 0 0 0 1.5px rgba(58, 174, 230, 0.55), inset 0 0 16px rgba(0, 255, 102, 0.08);
+  border: 1.5px solid #FF4D6D;
+  animation: academyRgbBox 6s ease-in-out infinite;
 }
 .easter-rgb .easter-txt {
   margin: 0;
   font-family: var(--font-display);
   font-size: 1.18rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #00FF66 0%, #FF4D6D 50%, #3AAEE6 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  animation: academyRgbText 6s ease-in-out infinite;
+}
+
+@keyframes academyRgbBox {
+  0% {
+    background: rgba(255, 59, 92, 0.16);
+    border-color: #FF4D6D;
+    box-shadow: 0 0 14px rgba(255, 77, 109, 0.22);
+  }
+  33% {
+    background: rgba(58, 174, 230, 0.17);
+    border-color: #3AAEE6;
+    box-shadow: 0 0 14px rgba(58, 174, 230, 0.22);
+  }
+  66% {
+    background: rgba(0, 255, 102, 0.15);
+    border-color: #00FF66;
+    box-shadow: 0 0 14px rgba(0, 255, 102, 0.22);
+  }
+  100% {
+    background: rgba(255, 59, 92, 0.16);
+    border-color: #FF4D6D;
+    box-shadow: 0 0 14px rgba(255, 77, 109, 0.22);
+  }
+}
+
+@keyframes academyRgbText {
+  0% {
+    color: #FF5C77;
+    text-shadow: 0 0 10px rgba(255, 92, 119, 0.3);
+  }
+  33% {
+    color: #5CC3F0;
+    text-shadow: 0 0 10px rgba(92, 195, 240, 0.3);
+  }
+  66% {
+    color: #29FF7A;
+    text-shadow: 0 0 10px rgba(41, 255, 122, 0.3);
+  }
+  100% {
+    color: #FF5C77;
+    text-shadow: 0 0 10px rgba(255, 92, 119, 0.3);
+  }
 }
 
 /* بطاقة المدرسة: حركة حديثة تتبدل بين اللون الأحمر واللون الأخضر */
@@ -221,9 +258,9 @@ h1 {
   opacity: 0.72;
 }
 .easter-btn-rgb {
-  background: linear-gradient(90deg, rgba(0, 255, 102, 0.22), rgba(255, 59, 92, 0.22), rgba(58, 174, 230, 0.24));
+  background: rgba(255, 255, 255, 0.06);
   color: #E6ECFA;
-  border: 1px solid #3AAEE6;
+  border: 1px solid rgba(255, 255, 255, 0.22);
 }
 .easter-btn-school {
   background: rgba(255, 255, 255, 0.06);
@@ -336,7 +373,7 @@ h1 {
 .pop { animation: pop .35s ease-out; }
 @keyframes pop { from { opacity: .35; transform: translateY(5px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
-  .pop, .easter-school, .easter-school .easter-txt { animation: none; }
+  .pop, .easter-rgb, .easter-rgb .easter-txt, .easter-school, .easter-school .easter-txt { animation: none; }
   * { transition: none !important; }
 }
 </style>
@@ -501,7 +538,6 @@ h1 {
     $("schoolBtn").disabled = true;
   }
 
-  /* واجهة برمجية جاهزة لربط أي مصدر تخزين لاحق للـ Easter Egg دون لمس بيانات الطلاب */
   window.QureoEasterStorage = {
     getMeta: readEasterMeta,
     setMeta: writeEasterMeta,
