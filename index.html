@@ -76,7 +76,7 @@ img { max-width: 100%; }
   color-scheme: dark;
 }
 
-/* وضع الـ Easter Egg السري (Hacker Matrix Mode) */
+/* وضع الـ Easter Egg السري */
 :root.matrix-mode {
   --rain: #00FF66;
   --rain-a: 0.75;
@@ -176,6 +176,66 @@ h1 {
 }
 .hint { margin: 2px 0 0; font-size: .85rem; color: var(--muted); }
 
+/* تنسيقات وضع الأكاديمية السري (Easter Egg) */
+.easter-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: pop .35s ease-out;
+}
+.easter-box {
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.easter-green {
+  background: rgba(0, 255, 102, 0.12);
+  border: 1.5px solid #00FF66;
+}
+.easter-green .easter-txt {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #00FF66;
+}
+.easter-red-green {
+  background: linear-gradient(135deg, rgba(255, 59, 92, 0.16) 0%, rgba(0, 255, 102, 0.14) 100%);
+  border: 1.5px solid #FF3B5C;
+  box-shadow: inset 0 0 0 1px rgba(0, 255, 102, 0.35);
+}
+.easter-red-green .easter-txt {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #FF4D6D 0%, #00FF66 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.easter-btn {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 8px;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+.easter-btn-green {
+  background: rgba(0, 255, 102, 0.2);
+  color: #00FF66;
+  border: 1px solid #00FF66;
+}
+.easter-btn-rg {
+  background: linear-gradient(90deg, rgba(255, 59, 92, 0.25) 0%, rgba(0, 255, 102, 0.25) 100%);
+  color: #E6ECFA;
+  border: 1px solid #FF4D6D;
+}
+
 .grade-switch {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -214,11 +274,15 @@ h1 {
   border: 1.5px solid var(--line);
   border-radius: 10px;
   padding: 12px 14px;
-  transition: border-color .2s;
+  transition: border-color .2s, opacity .2s;
 }
 .field::placeholder { color: var(--muted); opacity: .8; }
 .field:focus { outline: none; border-color: var(--btn); }
 .field:focus-visible { outline: 2px solid var(--btn); outline-offset: 2px; }
+.field:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 
 .status { min-height: 2.1rem; margin: 0; display: flex; align-items: center; }
 .status span { font-size: .92rem; padding: 3px 12px; border-radius: 999px; color: var(--ink); }
@@ -288,7 +352,7 @@ h1 {
 
 <div class="app" dir="rtl" lang="ar">
   <div class="bar">
-    <span id="easterBadge" class="easter-badge" hidden>🎮 DEV MODE: M.A.M</span>
+    <span id="easterBadge" class="easter-badge" hidden>🎮 ACADEMY MODE</span>
     <button id="themeBtn" class="icon-btn" type="button" aria-label="تبديل الوضع الليلي والنهاري"></button>
   </div>
 
@@ -319,10 +383,11 @@ h1 {
     </svg>
   </section>
 
-  <!-- المربع السفلي: العنوان + الجزء الإنجليزي + زر تبديل الصف + البحث -->
+  <!-- المربع السفلي -->
   <main class="card card-top">
     <div class="inner">
-      <div class="head">
+      <!-- العناصر العادية للمنصة (تختفي عند تفعيل الـ Easter Egg) -->
+      <div id="normalHeader" class="head">
         <h1>اكواد منصه QUREO لطلاب مدرسه الثانويه المشتركة</h1>
         <p id="subEn" class="sub-en" dir="ltr">{《&lt;ICT &amp; Programming &amp; Financial Literacy&lt;\&gt;》}</p>
         <p class="hint">اكتب اسمك</p>
@@ -331,6 +396,19 @@ h1 {
       <div id="gradeSwitch" class="grade-switch" role="group" aria-label="اختيار الصف الدراسي">
         <button type="button" class="grade-btn" data-grade="1" aria-pressed="false">الصف الأول</button>
         <button type="button" class="grade-btn active" data-grade="2" aria-pressed="true">الصف الثاني</button>
+      </div>
+
+      <!-- واجهة الـ Easter Egg الخاصة بالأكاديمية (تظهر فقط في الوضع السري) -->
+      <div id="easterPanel" class="easter-panel" hidden>
+        <div class="easter-box easter-green">
+          <p class="easter-txt">طلاب اكادمية المبرمج</p>
+          <button type="button" class="easter-btn easter-btn-green" disabled>دخول الأكاديمية (قريباً)</button>
+        </div>
+
+        <div class="easter-box easter-red-green">
+          <p class="easter-txt">الصغير من مدرسه البصيليه الثانويه المشتركة</p>
+          <button type="button" class="easter-btn easter-btn-rg" disabled>بوابة المدرسة (قريباً)</button>
+        </div>
       </div>
 
       <input id="q" class="field" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="اسمك" aria-label="اكتب اسمك">
@@ -395,9 +473,22 @@ h1 {
     $("easterBadge").hidden = !matrixActive;
     window.__rainBoost = matrixActive ? 2.4 : 1;
 
+    /* إخفاء عناصر المنصة العادية وإظهار لوحة الأكاديمية */
+    $("normalHeader").hidden = matrixActive;
+    $("gradeSwitch").hidden = matrixActive;
+    $("easterPanel").hidden = !matrixActive;
+
+    /* إيقاف كتابة الأسماء والبحث في وضع الـ Easter Egg */
+    var qInput = $("q");
+    qInput.disabled = matrixActive;
+
     if (matrixActive) {
-      setStatus("🎮 تم تفعيل وضع المطورين السري (QUREO DEV)", "ok");
+      qInput.value = "";
+      qInput.placeholder = "تم إيقاف البحث في الوضع السري";
+      renderEntries([]);
+      setStatus("🎮 وضع أكاديمية المبرمج الصغير نشط (اضغط 5 مرات للعودة)", "ok");
     } else {
+      qInput.placeholder = "اسمك";
       search();
     }
   }
@@ -624,6 +715,8 @@ h1 {
 
   /* ---------- البحث داخل الصف المختار ---------- */
   function search() {
+    if (matrixActive) return;
+
     var n = norm($("q").value);
     var usersList = DATA[currentGrade] || [];
     var list = [];
