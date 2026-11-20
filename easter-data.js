@@ -6,7 +6,7 @@ window.QUREO_EASTER_DATA = {
     academyBtnText: "دخول الأكاديمية",
     schoolText: "من مدرسه البصيليه الثانويه المشتركة",
     schoolBtnText: "بوابة المدرسة",
-    dvLabel: "Dv تطوير",
+    dvLabel: "DEV تطوير",
     devs: ["JOKER", "Messi⁷", "AShraf"]
   },
 
