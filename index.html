@@ -248,6 +248,31 @@ h1 {
   }
 }
 
+/* الطبقة السرية الداخلية (تُفتح بالضغط على حرف J داخل وضع الـ Easter Egg) */
+.nested-easter {
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: rgba(11, 26, 48, 0.9);
+  border: 1.5px dashed #5CC3F0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: pop .3s ease-out;
+}
+.nested-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #5CC3F0;
+}
+.nested-txt {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
 .easter-btn {
   font: inherit;
   font-size: 0.85rem;
@@ -257,11 +282,7 @@ h1 {
   cursor: not-allowed;
   opacity: 0.72;
 }
-.easter-btn-rgb {
-  background: rgba(255, 255, 255, 0.06);
-  color: #E6ECFA;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-}
+.easter-btn-rgb,
 .easter-btn-school {
   background: rgba(255, 255, 255, 0.06);
   color: #E6ECFA;
@@ -373,7 +394,7 @@ h1 {
 .pop { animation: pop .35s ease-out; }
 @keyframes pop { from { opacity: .35; transform: translateY(5px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
-  .pop, .easter-rgb, .easter-rgb .easter-txt, .easter-school, .easter-school .easter-txt { animation: none; }
+  .pop, .easter-rgb, .easter-rgb .easter-txt, .easter-school, .easter-school .easter-txt, .nested-easter { animation: none; }
   * { transition: none !important; }
 }
 </style>
@@ -439,6 +460,12 @@ h1 {
           <p id="schoolTitle" class="easter-txt">من مدرسه البصيليه الثانويه المشتركة</p>
           <button id="schoolBtn" type="button" class="easter-btn easter-btn-school" disabled>بوابة المدرسة</button>
         </div>
+
+        <!-- إيستر إيج فرعي داخل الإيستر إيج الأساسي (يُفتح بالضغط على حرف J) -->
+        <div id="nestedEasterBox" class="nested-easter" hidden>
+          <span class="nested-tag">[J]</span>
+          <p id="nestedEasterText" class="nested-txt">تم تفعيل الطبقة السرية الداخلية</p>
+        </div>
       </div>
 
       <input id="q" class="field" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="اسمك" aria-label="اكتب اسمك">
@@ -497,12 +524,14 @@ h1 {
   /* ---------- بنية استقبال معلومات الـ Easter Egg من التخزين (غير تخزين الطلاب) ---------- */
   var EASTER_STATE_KEY = "qureo-easter";
   var EASTER_META_KEY = "qureo-easter-meta";
+  var NESTED_J_KEY = "qureo-easter-j";
 
   var DEFAULT_EASTER_META = {
     academyText: "طلاب اكادمية المبرمج الصغير",
     academyBtnText: "دخول الأكاديمية",
     schoolText: "من مدرسه البصيليه الثانويه المشتركة",
     schoolBtnText: "بوابة المدرسة",
+    nestedText: "تم تفعيل الطبقة السرية الداخلية",
     extraInfo: null
   };
 
@@ -534,6 +563,7 @@ h1 {
     $("academyBtn").textContent = m.academyBtnText || DEFAULT_EASTER_META.academyBtnText;
     $("schoolTitle").textContent = m.schoolText || DEFAULT_EASTER_META.schoolText;
     $("schoolBtn").textContent = m.schoolBtnText || DEFAULT_EASTER_META.schoolBtnText;
+    $("nestedEasterText").textContent = m.nestedText || DEFAULT_EASTER_META.nestedText;
     $("academyBtn").disabled = true;
     $("schoolBtn").disabled = true;
   }
@@ -549,8 +579,9 @@ h1 {
 
   renderEasterMeta();
 
-  /* ---------- Easter Egg (محفوظ في localStorage ليبقى بعد إعادة التحميل) ---------- */
+  /* ---------- Easter Egg الأساسي + الإيستر إيج الداخلي عند حرف J ---------- */
   var matrixActive = false;
+  var subEasterActive = false;
   window.__rainBoost = 1;
 
   function saveEasterState(active) {
@@ -571,6 +602,35 @@ h1 {
     }
   }
 
+  function saveSubEasterState(active) {
+    try {
+      if (active) {
+        localStorage.setItem(NESTED_J_KEY, "1");
+      } else {
+        localStorage.removeItem(NESTED_J_KEY);
+      }
+    } catch (e) {}
+  }
+
+  function loadSubEasterState() {
+    try {
+      return localStorage.getItem(NESTED_J_KEY) === "1";
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function applySubEaster(active, shouldSave) {
+    subEasterActive = !!(matrixActive && active);
+    if (shouldSave) saveSubEasterState(subEasterActive);
+    $("nestedEasterBox").hidden = !subEasterActive;
+  }
+
+  function toggleSubEaster() {
+    if (!matrixActive) return;
+    applySubEaster(!subEasterActive, true);
+  }
+
   function applyEasterEgg(active, shouldSave) {
     matrixActive = !!active;
     if (shouldSave) saveEasterState(matrixActive);
@@ -588,11 +648,13 @@ h1 {
 
     if (matrixActive) {
       renderEasterMeta();
+      applySubEaster(loadSubEasterState(), false);
       qInput.value = "";
       qInput.placeholder = "تم إيقاف البحث في الوضع السري";
       renderEntries([]);
       setStatus("", "");
     } else {
+      applySubEaster(false, false);
       qInput.placeholder = "اسمك";
       search();
     }
@@ -619,6 +681,13 @@ h1 {
   var kPos = 0;
   window.addEventListener("keydown", function (e) {
     var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+
+    /* إيستر إيج فرعي عند الضغط على حرف J داخل وضع الإيستر إيج الأساسي فقط */
+    if (matrixActive && key === "j") {
+      toggleSubEaster();
+      return;
+    }
+
     if (key === konami[kPos]) {
       kPos++;
       if (kPos === konami.length) {
@@ -913,4 +982,4 @@ h1 {
 })();
 </script>
 </body>
-</html>
+  </html>
