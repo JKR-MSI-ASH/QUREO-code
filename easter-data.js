@@ -3,7 +3,6 @@ window.QUREO_EASTER_DATA = {
   /* معلومات الإيستر إيج الأول (الوضع السري الأساسي) */
   primary: {
     academyText: "",
-    academyBtnText: "دخول الأكاديمية",
     schoolText: "من مدرسه البصيليه الثانويه المشتركة",
     schoolBtnText: "بوابة المدرسة",
     dvLabel: "DEV تطوير",
