@@ -2,7 +2,7 @@
 window.QUREO_EASTER_DATA = {
   /* معلومات الإيستر إيج الأول (الوضع السري الأساسي) */
   primary: {
-    academyText: "طلاب اكادمية المبرمج الصغير",
+    academyText: "",
     academyBtnText: "دخول الأكاديمية",
     schoolText: "من مدرسه البصيليه الثانويه المشتركة",
     schoolBtnText: "بوابة المدرسة",
@@ -12,6 +12,6 @@ window.QUREO_EASTER_DATA = {
 
   /* معلومات الإيستر إيج الثاني (الطبقة الداخلية عند حرف J / ج) */
   secondary: {
-    nestedText: "تطوير طلاب اكادميه المبرمج الصغير { يوسف JOKER} &{Messi⁷⁰} & {ashref aldoksy¹⁰}"
+    nestedText: "تطوير { يوسف JOKER} &{Messi⁷⁰} & {ashref aldoksy¹⁰}"
   }
 };
